@@ -1,12 +1,14 @@
 module Main where
 
-
 import Network.Transport.TCP (createTransport, defaultTCPParameters)
 import Control.Distributed.Process
 import Control.Distributed.Process.Node
 
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
+
+
+import System.Environment (getArgs)
 
 import Lib (ourAdd)
 
