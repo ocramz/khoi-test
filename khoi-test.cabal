@@ -1,12 +1,12 @@
 name:                khoi-test
 version:             0.1.0.0
-synopsis:            TODO Initial project template from stack
+synopsis:            
 description:         Please see README.md
 homepage:            https://github.com/ocramz/khoi-test
 license:             BSD3
 license-file:        LICENSE
 author:              Marco Zocca
-maintainer:          example@example.com
+maintainer:          zocca.marco@gmail.com
 copyright:           2016 Marco Zocca
 category:            Cloud Haskell
 build-type:          Simple
@@ -20,6 +20,9 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
+                     , distributed-process
+                     , network-transport-tcp
+                     , network-transport-inmemory
 
 executable khoi-test
   default-language:    Haskell2010
@@ -28,6 +31,9 @@ executable khoi-test
   main-is:             Main.hs
   build-depends:       base
                      , khoi-test
+                     , distributed-process
+                     , network-transport-tcp
+                     , network-transport-inmemory
 
 test-suite spec
   default-language:    Haskell2010
