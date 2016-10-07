@@ -21,6 +21,7 @@ library
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
                      , distributed-process
+                     , distributed-process-simplelocalnet
                      , network-transport-tcp
                      , network-transport-inmemory
                      , mwc-random
@@ -35,6 +36,7 @@ executable khoi-test
   build-depends:       base
                      , khoi-test
                      , distributed-process
+                     , distributed-process-simplelocalnet
                      , network-transport-tcp
                      , network-transport-inmemory
                      , optparse-applicative
