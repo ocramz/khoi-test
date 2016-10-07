@@ -8,7 +8,8 @@ import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
 
 
-import System.Environment (getArgs)
+-- import System.Environment (getArgs)
+import Options.Applicative
 
 import Lib (ourAdd)
 
@@ -34,12 +35,12 @@ withLocalNode mf = do
   return ()
 
 
-main :: IO ()
-main = withLocalNode $ do
-    self <- getSelfPid
-    send self "hello"
-    hello <- expect :: Process String
-    liftIO $ putStrLn hello
+-- main :: IO ()
+-- main = withLocalNode $ do
+--     self <- getSelfPid
+--     send self "hello"
+--     hello <- expect :: Process String
+--     liftIO $ putStrLn hello
 
 task1 :: Process ()
 task1 = do
@@ -77,3 +78,37 @@ task1 = do
 --     liftIO $ putStrLn hello
 --   return ()
 
+
+
+
+
+-- | optparse-applicative options
+
+
+data Options = Options { k :: Int,  -- [s] send period duration
+                         l :: Int,  -- [s] grace period "
+                         s :: Int}  -- random seed 
+             deriving (Eq, Show)
+
+showOptions (Options k l s) = do
+  putStrLn $ "send period [s] : " ++ show k
+  putStrLn $ "grace period [s] : " ++ show l
+  putStrLn $ "random seed : " ++ show s
+
+
+options :: Parser Options
+options = Options
+     <$> argument auto
+         ( metavar "SEND_PERIOD" <> help "Send period [s]" )
+     <*> argument auto
+         ( metavar "GRACE_PERIOD" <> help "Grace period [s]" )
+     <*> argument auto (metavar "RANDOM_SEED" <> help "random seed")
+
+
+main :: IO ()
+main = execParser opts >>= showOptions
+  where
+    opts = info (helper <*> options)
+      ( fullDesc
+     <> progDesc "khoi-test (c) Marco Zocca, Oct 2016"
+     <> header "khoi-test" )
