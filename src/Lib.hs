@@ -16,7 +16,7 @@ import Data.Binary
 import Data.Typeable
 import GHC.Generics (Generic)
 
-import System.Environment
+import System.Environment (getArgs, getProgName)
        -- import Network.Socket hiding (shutdown)
 
 
