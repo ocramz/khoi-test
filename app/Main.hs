@@ -90,23 +90,24 @@ data Options = Options { k :: Int,  -- [s] send period duration
                          s :: Int}  -- random seed 
              deriving (Eq, Show)
 
-showOptions (Options k l s) = do
-  putStrLn $ "send period [s] : " ++ show k
-  putStrLn $ "grace period [s] : " ++ show l
-  putStrLn $ "random seed : " ++ show s
+printOptions :: Options -> IO ()
+printOptions (Options k' l' s') = do
+  putStrLn $ "send period [s] : " ++ show k'
+  putStrLn $ "grace period [s] : " ++ show l'
+  putStrLn $ "random seed : " ++ show s'
 
 
 options :: Parser Options
 options = Options
      <$> argument auto
-         ( metavar "SEND_PERIOD" <> help "Send period [s]" )
+         ( metavar "SEND_PERIOD" <> help "Send period [s] :: Int")
      <*> argument auto
-         ( metavar "GRACE_PERIOD" <> help "Grace period [s]" )
-     <*> argument auto (metavar "RANDOM_SEED" <> help "random seed")
+         ( metavar "GRACE_PERIOD" <> help "Grace period [s] :: Int" )
+     <*> argument auto (metavar "RANDOM_SEED" <> help "random seed :: Int")
 
 
 main :: IO ()
-main = execParser opts >>= showOptions
+main = execParser opts >>= printOptions
   where
     opts = info (helper <*> options)
       ( fullDesc
