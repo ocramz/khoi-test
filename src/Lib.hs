@@ -16,7 +16,7 @@ import Data.Binary
 import Data.Typeable
 import GHC.Generics (Generic)
 
--- import System.Environment
+import System.Environment
        -- import Network.Socket hiding (shutdown)
 
 
@@ -43,55 +43,53 @@ pingServer = do
 remotable ['pingServer]
 
 
--- master :: Process ()
--- master = do
---   node <- getSelfNode                               -- 1
+master :: Process ()
+master = do
+  node <- getSelfNode                               -- 1
 
---   say $ printf "spawning on %s" (show node)
---   pid <- spawn node $(mkStaticClosure 'pingServer)  -- 2
+  say $ printf "spawning on %s" (show node)
+  pid <- spawn node $(mkStaticClosure 'pingServer)  -- 2
 
---   mypid <- getSelfPid                               -- 3
---   say $ printf "sending ping to %s" (show pid)
---   send pid (Ping mypid)                             -- 4
+  mypid <- getSelfPid                               -- 3
+  say $ printf "sending ping to %s" (show pid)
+  send pid (Ping mypid)                             -- 4
 
---   Pong _ <- expect                                  -- 5
---   say "pong."
+  Pong _ <- expect                                  -- 5
+  say "pong."
 
---   terminate
-
-
+  terminate
 
 
 
--- main :: IO ()
--- main = distribMain (\_ -> master) Lib.__remoteTable
+main :: IO ()
+main = distribMain (\_ -> master) Lib.__remoteTable
 
 
 
--- distribMain :: ([NodeId] -> Process ()) -> (RemoteTable -> RemoteTable) -> IO ()
--- distribMain master frtable = do
---   args <- getArgs
---   let rtable = frtable initRemoteTable
+distribMain :: ([NodeId] -> Process ()) -> (RemoteTable -> RemoteTable) -> IO ()
+distribMain master frtable = do
+  args <- getArgs
+  let rtable = frtable initRemoteTable
 
---   case args of
---     [] -> do
---       backend <- initializeBackend defaultHost defaultPort rtable
---       startMaster backend master
---     [ "master" ] -> do
---       backend <- initializeBackend defaultHost defaultPort rtable
---       startMaster backend master
---     [ "master", port ] -> do
---       backend <- initializeBackend defaultHost port rtable
---       startMaster backend master
---     [ "slave" ] -> do
---       backend <- initializeBackend defaultHost defaultPort rtable
---       startSlave backend
---     [ "slave", port ] -> do
---       backend <- initializeBackend defaultHost port rtable
---       startSlave backend
---     [ "slave", host, port ] -> do
---       backend <- initializeBackend host port rtable
---       startSlave backend
+  case args of
+    [] -> do
+      backend <- initializeBackend defaultHost defaultPort rtable
+      startMaster backend master
+    [ "master" ] -> do
+      backend <- initializeBackend defaultHost defaultPort rtable
+      startMaster backend master
+    [ "master", port ] -> do
+      backend <- initializeBackend defaultHost port rtable
+      startMaster backend master
+    [ "slave" ] -> do
+      backend <- initializeBackend defaultHost defaultPort rtable
+      startSlave backend
+    [ "slave", port ] -> do
+      backend <- initializeBackend defaultHost port rtable
+      startSlave backend
+    [ "slave", host, port ] -> do
+      backend <- initializeBackend host port rtable
+      startSlave backend
 
--- defaultHost = "localhost"
--- defaultPort = "44444"
+defaultHost = "localhost"
+defaultPort = "44444"
