@@ -99,10 +99,8 @@ printOptions (Options k' l' s') = do
 
 options :: Parser Options
 options = Options
-     <$> argument auto
-         ( metavar "SEND_PERIOD" <> help "Send period [s] :: Int")
-     <*> argument auto
-         ( metavar "GRACE_PERIOD" <> help "Grace period [s] :: Int" )
+     <$> argument auto ( metavar "SEND_PERIOD" <> help "Send period [s] :: Int")
+     <*> argument auto ( metavar "GRACE_PERIOD" <> help "Grace period [s] :: Int" )
      <*> argument auto (metavar "RANDOM_SEED" <> help "random seed :: Int")
 
 

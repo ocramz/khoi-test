@@ -27,6 +27,7 @@ library
                      , mwc-random
                      , optparse-applicative
                      , binary
+                     , time
 
 executable khoi-test
   default-language:    Haskell2010
@@ -40,6 +41,7 @@ executable khoi-test
                      , network-transport-tcp
                      , network-transport-inmemory
                      , optparse-applicative
+                     , time
 
 test-suite spec
   default-language:    Haskell2010
