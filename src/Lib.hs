@@ -16,6 +16,9 @@ import Data.Binary
 import Data.Typeable
 import GHC.Generics (Generic)
 
+import Control.Concurrent
+import System.Random.MWC
+
 import System.Environment (getArgs, getProgName)
        -- import Network.Socket hiding (shutdown)
 
@@ -26,6 +29,8 @@ ourAdd :: Int  -- ^ left
        -> Int  -- ^ sum
 ourAdd x y = x + y
 
+
+-- | ping example from P&CH
 
 data Message = Ping ProcessId
              | Pong ProcessId
@@ -93,3 +98,50 @@ distribMain master frtable = do
 
 defaultHost = "localhost"
 defaultPort = "44444"
+
+
+
+
+-- |
+
+
+data NodeState = Follower { electionTimeout :: Int }
+               | Candidate { currentTerm :: Int,
+                             votedFor :: NodeId }
+               | Leader { nextLogIndex :: Int,
+                          heartbeatRate :: Int } deriving (Eq, Show, Ord) 
+
+
+-- evalTransition s = case s of Follower t -> do
+--                                liftIO $ threadDelay t
+
+
+-- | election term #
+type Term = Int
+
+-- | index in the log
+type EntryIx = Int
+
+-- | RequestVote RPC and respective result
+data VoteRPC = ReqVote {  candidateId :: NodeId,
+                          termV :: Term,
+                          lastLogIx :: EntryIx,
+                          lastLogTerm :: Term }
+             | ResultVote { termV :: Term,
+                            voteGranted :: Bool}
+             deriving (Typeable, Generic)
+
+instance Binary VoteRPC
+
+-- | AppendEntries RPC and respective result
+data AppendEntriesRPC a = ReqAppend { termA :: Term,
+                                    leaderId :: NodeId,
+                                    prevLogIx :: EntryIx,
+                                    prevLogTerm :: Term,
+                                    entries :: Maybe [a],
+                                    commitIx :: EntryIx}
+                        | ResultAppend { termA :: Term,
+                                         success :: Bool }
+                        deriving (Typeable, Generic)
+
+instance Binary a => Binary (AppendEntriesRPC a)
