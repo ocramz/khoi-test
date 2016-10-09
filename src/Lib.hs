@@ -133,6 +133,11 @@ data VoteRPC = ReqVote {  candidateId :: NodeId,
 
 instance Binary VoteRPC
 
+-- | ", typed channel
+data MsgVoteRPC = MsgVoteRPC (SendPort VoteRPC) deriving (Typeable, Generic)
+instance Binary MsgVoteRPC
+
+
 -- | AppendEntries RPC and respective result
 data AppendEntriesRPC a = ReqAppend { termA :: Term,
                                     leaderId :: NodeId,
@@ -145,3 +150,7 @@ data AppendEntriesRPC a = ReqAppend { termA :: Term,
                         deriving (Typeable, Generic)
 
 instance Binary a => Binary (AppendEntriesRPC a)
+
+data MsgAppendEntriesRPC a = MsgAppendEntriesRPC (SendPort (AppendEntriesRPC a)) deriving (Typeable, Generic)
+
+instance (Binary a, Typeable a) => Binary (MsgAppendEntriesRPC a)
