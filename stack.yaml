@@ -5,7 +5,6 @@ packages:
 extra-deps:
 - distributed-process-0.6.4
 - distributed-process-simplelocalnet-0.2.3.2
+- ip-0.8.6
 - network-multicast-0.1.1
-# - binary-0.7.6.1
-# - transformers-0.4.3.0
 resolver: lts-7.2
